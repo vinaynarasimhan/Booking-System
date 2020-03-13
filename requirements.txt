@@ -1,0 +1,5 @@
+django==3.0.4 
+django-auth-ldap==2.1.0 
+django-recurrence==1.10.2
+python-ldap==3.2.0 
+pytz==2019.3
