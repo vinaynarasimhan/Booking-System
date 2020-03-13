@@ -1,0 +1,120 @@
+{% extends 'user.html' %}
+{% load static %}
+{% block title %} Book Slot {% endblock %}
+{% block pagetitle %} Book Slot {% endblock %}
+
+{% block css %}
+<style type="text/css">
+    select {
+        font-size: 10px;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/jquery.datetimepicker.css' %}" type="text/css" />
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/jquery.datetimepicker.full.min.js' %}">
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#id_start_date_time").datetimepicker(
+            {
+                format: 'Y-m-d H:i:s', prevButton:false, nextButton:false,
+                monthStart: "{{month}}", monthEnd: "{{month|add:'-1'}}",
+                yearStart: "{{year}}", yearEnd: "{{year}}"
+            }
+        );
+        $("#id_end_date_time").datetimepicker(
+            {
+                format: 'Y-m-d H:i:s', prevButton:false, nextButton:false,
+                monthStart: "{{month}}", monthEnd: "{{month|add:'-1'}}",
+                yearStart: "{{year}}", yearEnd: "{{year}}"
+            }
+        );
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <center>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-{{ message.tags }}">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="fa fa-close"></i>
+                </button>
+                <strong>{{ message }}</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </center>
+    <br>
+    <form action="" method="post" >
+        {% csrf_token %}
+        <fieldset>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <i class="fa fa-close"></i>
+                            </button>
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="fa fa-close"></i>
+                        </button>
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row">
+                <div class="col">
+                    {% for field in form %}
+                            <p><b><u>{{ field.label }}</u></b></p>
+                            <p>{{ field }} <small>{{ field.help_text }}</small></p>
+                    {% endfor %}
+                    <br>
+                    <button class="btn btn-success" type="submit">
+                        <i class="fa fa-check-circle"></i>
+                        {% if slot_id %} Update {% else %} Add {% endif %}
+                    </button>
+                    <a href="{% url 'website:bookings' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+                <div class="col">
+                {{ formset.management_form }}
+                    {% if slot_id %}
+                        <button class="btn btn-info" name="add">
+                            <i class="fa fa-plus-circle"></i>&nbsp;Add Participant
+                        </button>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <strong>Note:</strong>
+                            Participants can be added once the slot is created
+                        </div>
+                    {% endif %}
+                    <hr>
+                    <b><u>Participants</u></b>
+                    <br><br>
+                    {% for form in formset %}
+                        <b><u>Participant {{forloop.counter}}:</u></b>
+                        <div>
+                            {{ form }}
+                        </div>
+                        <hr>
+                    {% endfor %}
+                    {% if form.instance.get_no_of_participants == 0 %}
+                        <span class="badge badge-warning">No Participants added</span>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

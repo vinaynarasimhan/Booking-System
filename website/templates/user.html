@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="{% url 'website:bookings' %}">
+            Booking System
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'website:bookings' %}">
+                   Dashboard
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Schedule</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'website:index' 1 %}">
+                        My Calendar
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'website:index' %}">
+                        Resource Calendar
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown my-lg-0" style="font-size: 1.2rem">
+                <a class="dropdown-toggle nav-link" id="user_dropdown" data-toggle="dropdown" href="#">Welcome, {{user.get_full_name|title}}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{% url 'website:profile' %}">
+                        <i class="fa fa-user"></i>  My Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="user_logout" href="{% url 'website:logout' %}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+        </div>
+    </nav>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'user.html' %}
+
+{% block title %} Bookings {% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            html:true
+        })
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Upcoming Bookings -->
+    <div id="upcomingbookings" class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#comingbookings">
+                <div class="row">
+                    <div class="col-md-4">
+                        Upcoming Bookings
+                    </div>
+                    <div class="ml-auto" style="padding-right: 10px">
+                        <i class="fa fa-angle-down"></i>  
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="comingbookings" class="collapse" data-parent="#upcomingbookings">
+            <div class="card-body">
+                {% if upcoming_slots %}
+                    <div id="book-resource">
+                        <ul class="list-group">
+                        {% for slot in upcoming_slots %}
+                            <li class="list-group-item">
+                                <div class="row">
+                                        <div class="col-md-5">
+                                            <i type="button" class="fa fa-info-circle" title="" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                                            <b>Start Date time:</b> {{slot.start_date_time}}<br>
+                                            <b>End Date time:</b> {{slot.end_date_time}}<br>
+                                            <b>No of participants:</b> {{slot.get_no_of_participants}}
+                                            " data-original-title="{{slot}}">
+                                            </i>
+                                            <a href="{% url 'website:edit_slot' slot.id %}">
+                                                {{ slot }}
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if slot.approved %}
+                                                <span class="badge badge-success">
+                                                    Request Approved
+                                                </span>
+                                            {% else %}
+                                                <span class="badge badge-warning">
+                                                    Request Pending
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-3" style="padding-right: 10px">
+                                            <a href="{% url 'website:edit_slot' slot.id %}" class="btn btn-primary">
+                                                <i class="fa fa-edit"></i>&nbsp;Edit
+                                            </a>
+                                        </div>
+                                    </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <center>
+                        <span class="badge badge-warning">
+                            <big> No slots booked </big>
+                        </span>
+                    </center>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <br>
+    <!-- Resources Available -->
+    <div id="accordian-resource" class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#resources">
+                <div class="row">
+                    <div class="col-md-4">
+                        Available Resources
+                    </div>
+                    <div class="ml-auto" style="padding-right: 10px">
+                        <i class="fa fa-angle-down"></i>  
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="resources" class="collapse show" data-parent="#accordian-resource">
+            <div class="card-body">
+                {% if resources %}
+                    <div id="book-resource">
+                        <ul class="list-group">
+                            {% for resource in resources %}
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <i type="button" class="fa fa-info-circle" title="" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                                            <b>Type:</b> {{resource.resource_type}}<br>
+                                            <b>Description:</b> {{resource.description}}<br>
+                                            <b>Department:</b> {{resource.get_department}}
+                                            " data-original-title="{{resource.name}}">
+                                            </i>
+                                            {{ resource }}
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-3" style="padding-right: 10px">
+                                            <a href="{% url 'website:add_slot' resource.id %}" class="btn btn-success">
+                                                Book
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}    
+                        </ul>
+                    </div>
+                {% else %}
+                    <center>
+                        <span class="badge badge-warning">
+                            <big> No resources found </big>
+                        </span>
+                    </center>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <br>
+    <!-- All Bookings -->
+    <div id="allbookings" class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#mybookings">
+                <div class="row">
+                    <div class="col-md-4">
+                        All Bookings
+                    </div>
+                    <div class="ml-auto" style="padding-right: 10px">
+                        <i class="fa fa-angle-down"></i>  
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="mybookings" class="collapse" data-parent="#allbookings">
+            <div class="card-body">
+                {% if all_slots %}
+                    <div id="book-resource">
+                        <ul class="list-group">    
+                        {% for slot in all_slots %}
+                            <li class="list-group-item">
+                                <i type="button" class="fa fa-info-circle" title="" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                                <b>Start Date time:</b> {{slot.start_date_time}}<br>
+                                <b>End Date time:</b> {{slot.end_date_time}}<br>
+                                <b>No of participants:</b> {{slot.get_no_of_participants}}
+                                " data-original-title="{{slot}}">
+                                </i>
+                                {{ slot }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <center>
+                        <span class="badge badge-warning">
+                            <big> No slots booked </big>
+                        </span>
+                    </center>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

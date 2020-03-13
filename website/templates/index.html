@@ -1,0 +1,69 @@
+{% extends template %}
+{% load static %}
+
+{% block title %} Bookings {% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        var events_data = []
+        {% for i in bookings %}
+            var event = {
+                first_name: "{{i.creator__first_name}}",
+                last_name: "{{i.creator__last_name}}",
+                title: '{{i.resource__name}}',
+                start: "{{i.start_date_time|date:'Y-m-d G:i:s'}}",
+                end: "{{i.end_date_time|date:'Y-m-d G:i:s'}}"
+            }
+            events_data.push(event);
+        {% endfor %}
+        $('#calendar').fullCalendar({
+            viewRender: function(currentView) {
+                $(".fc-prev-button").prop('disabled', true);
+                $(".fc-prev-button").addClass('fc-state-disabled');
+                $(".fc-next-button").prop('disabled', true);
+                $(".fc-next-button").addClass('fc-state-disabled');
+            },
+            defaultView: 'month',
+            fixedWeekCount: false,
+            showNonCurrentDates: false,
+            events:  events_data,
+            eventClick: function(event) {
+                $('#modalTitle').html("Booking for " + event.title);
+                var data = "Booked by " + event.first_name + " " +
+                    event.last_name;
+                var Start = "<br>Start Date Time: " + moment(event.start, 'X').format('lll');
+                var End = "<br>End Date Time: " + moment(event.end, 'X').format('lll');
+                $('#modalBody').html(data + Start + End);
+                $('#calendarModal').modal();
+              }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<center>
+    <div class="container">
+        <!-- Show current month calendar -->
+        <div id='calendar'></div>
+    </div>
+</center>
+<div id="calendarModal" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="modalTitle" class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fa fa-times"></i></span>
+        </button>
+      </div>
+      <div id="modalBody" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

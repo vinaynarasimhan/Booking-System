@@ -1,0 +1,70 @@
+{% extends 'user.html' %}
+{% block title %} Profile {% endblock %}
+{% block pagetitle %} My Profile {% endblock %}
+
+<style type="text/css">
+    select {
+        font-size: 10px;
+    }
+</style>
+
+{% block content %}
+<div class="container">
+    <center>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-{{ message.tags }}">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="fa fa-close"></i>
+                </button>
+                <strong>{{ message }}</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </center>
+    <br>
+    <form action="{% url 'website:profile'%}" method="post" >
+      {% csrf_token %}
+      <center>
+        <div class="row justify-content-center form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <form action="" method="post">
+                <fieldset>
+                    {% csrf_token %}
+                    <center>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-dismissible alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-dismissible alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% for field in form %}
+                            {{ field }} <small>{{ field.help_text }}</small>
+                            <br>
+                        {% endfor %}
+                        <br>
+                    </center>
+                    <button class="btn btn-success btn-lg" type="submit">Update</button>&nbsp;&nbsp;
+                    <a href="{% url 'website:index' %}" class="btn btn-primary btn-lg">Cancel</a></center>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    </center>
+    </form>
+</div>
+{% endblock content %}
