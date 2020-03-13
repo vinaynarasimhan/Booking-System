@@ -51,3 +51,10 @@ Installation
       ::
 
           $ pip install -r requirements.txt
+
+
+- Create superuser
+
+      ::
+
+          $ python manage.py createsuperuser
