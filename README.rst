@@ -56,5 +56,5 @@ Installation
 - Create superuser
 
       ::
-
+          $ python manage.py migrate
           $ python manage.py createsuperuser
